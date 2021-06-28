@@ -1,8 +1,8 @@
 const pgConfig  = {
-  user: 'cometadmin',
+  user: '',
   host: 'localhost',
   database: 'rtc',
-  password: 'cohere123',
+  password: '',
   port: 5432,
 }
 
