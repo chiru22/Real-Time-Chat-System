@@ -5,11 +5,11 @@ const pool = new Pool(poolConfig.pgConfig)
 
 const socketConnection = require('../socket');
 
-
 function userRegisteration(userData) {
   return new Promise((resolve, reject) => {
     const userId = uuid();
     const status = 'active';
+    const socketIoConnection = socketConnection.getSocketIoConnection()
     pool.connect((err, client, release) => {
       if (err) {
         reject(err)
@@ -25,6 +25,7 @@ function userRegisteration(userData) {
             if (error) {
               reject(error)
             }
+            socketIoConnection.emit('newUser', results.rows[0]);
             resolve(results.rows[0])
           })
         } else {
@@ -115,6 +116,7 @@ function getAllMessageById(fromUserid, toUserId) {
 
 function updateUserName(userData) {
   return new Promise((resolve, reject) => {
+    const socketIoConnection = socketConnection.getSocketIoConnection()
     pool.connect((err, client, release) => {
       if (err) {
         reject(err)
@@ -124,6 +126,7 @@ function updateUserName(userData) {
         if (error) {
           reject(error)
         }
+        socketIoConnection.emit('updateUser', results.rows[0])
         resolve(results.rows[0]);
       })
     })

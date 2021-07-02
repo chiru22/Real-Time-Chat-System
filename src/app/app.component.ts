@@ -22,7 +22,6 @@ export class AppComponent {
   activeUserIntervalId: any;
 
   constructor(private socket: Socket) {
-    console.log('constructor')
     let userData: any = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")) : '';
     if(userData && userData['user_id']) {
       this.currentUserData = userData;
@@ -53,6 +52,17 @@ export class AppComponent {
   }
 
   socketMessage() {
+    this.socket.on('updateUser', socketData => {
+      const isUserIndex: number = this.activeUserList.findIndex(item => item['user_id'] === socketData['user_id']);
+      if(isUserIndex >= 0) {
+        this.activeUserList[isUserIndex]['name'] = socketData['name'];
+      }
+    });
+
+    this.socket.on('newUser', socketData => {
+      this.activeUserList.push(socketData);
+    });
+
     this.socket.on('chat', socketData => {
       if([this.currentUserData['user_id'], this.selectedUserId].includes(socketData['from_user_id'])  &&  [this.currentUserData['user_id'], this.selectedUserId].includes(socketData['to_user_id'])) {
         this.messages.push(socketData);
@@ -126,6 +136,9 @@ export class AppComponent {
         "name": this.currentUserData['name'],
       });
       this.isNameEdit = !this.isNameEdit;
+      let userData = JSON.parse(localStorage.getItem("userData"));
+      userData['name'] = response.data['name'];
+      localStorage.setItem("userData", JSON.stringify(userData));
     } catch (err) {
       console.log(err);
     }
