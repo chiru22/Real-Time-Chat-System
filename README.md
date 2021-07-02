@@ -36,7 +36,7 @@ This is a chat application built with Angular v10 for the frontend, Node.js and 
 ### Client:
 
 ```sh
-cd realtimeChatApplication
+cd Real-Time-Chat-System
 npm i
 npm start
 ```
@@ -46,7 +46,7 @@ npm start
 ### Server:
 
 ```sh
-cd realtimeChatApplication/server
+cd Real-Time-Chat-System/server
 npm i
 node server.js
 ```
